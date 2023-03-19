@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -22,13 +23,13 @@ public class DiscordService {
 
     public void search(SlashCommandInteractionEvent event) {
         try {
-            String query = event.getOption("query").getAsString();
+            String query = Objects.requireNonNull(event.getOption("query")).getAsString();
 
             List<Search> result = movieService.search(query);
 
             EmbedBuilder embed = new EmbedBuilder();
             embed.setTitle("Your search result");
-            embed.setDescription(stringUtil.list(result));
+            embed.setDescription(stringUtil.listSearchResult(result));
 
             reply(event, embed);
         } catch (RuntimeException exception) {
@@ -38,14 +39,14 @@ public class DiscordService {
 
     public void get(SlashCommandInteractionEvent event) {
         try {
-            int index = event.getOption("index").getAsInt();
+            int index = Objects.requireNonNull(event.getOption("index")).getAsInt();
 
             Movie found = movieService.get(index);
 
             EmbedBuilder embed = new EmbedBuilder();
-            embed.setTitle(Movie.generateTitle(found));
+            embed.setTitle(stringUtil.generateMovieTitle(found));
             embed.setDescription(found.getOverview());
-            embed.setImage(Movie.generateUrl(found.getPoster()));
+            embed.setImage(stringUtil.generateMovieUrl(found.getPoster()));
 
             reply(event, embed);
         } catch (RuntimeException exception) {

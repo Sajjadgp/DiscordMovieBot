@@ -1,7 +1,7 @@
 package dev.sajjadgp.bot.config;
 
-import dev.sajjadgp.bot.command.GetCommand;
-import dev.sajjadgp.bot.command.SearchCommand;
+import dev.sajjadgp.bot.command.impl.GetCommand;
+import dev.sajjadgp.bot.command.impl.SearchCommand;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -29,10 +29,8 @@ public class DiscordConfig {
                 //.setActivity(Activity.playing("with your mom"))
                 .build().awaitReady();
 
-        jda.updateCommands().addCommands(
-                searchCommand.getSlashCommand(),
-                getCommand.getSlashCommand()
-        ).queue();
+        jda.updateCommands().addCommands(searchCommand.getValue(),
+                getCommand.getValue()).queue();
 
         return jda;
     }

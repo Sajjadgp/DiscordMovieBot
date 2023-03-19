@@ -64,13 +64,4 @@ public class Movie implements Serializable {
 
     @JsonAlias({"release_date", "first_air_date"})
     private LocalDate released;
-
-    public static String generateTitle(Movie m) {
-        return m.getTitle() + " " + m.getReleased().getYear();
-    }
-
-    public static String generateUrl(String path) {
-        return "https://image.tmdb.org/t/p/original" + path;
-    }
-
 }
