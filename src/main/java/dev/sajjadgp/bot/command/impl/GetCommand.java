@@ -1,5 +1,6 @@
-package dev.sajjadgp.bot.command;
+package dev.sajjadgp.bot.command.impl;
 
+import dev.sajjadgp.bot.command.CommandEvent;
 import dev.sajjadgp.bot.service.DiscordService;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -12,21 +13,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class GetCommand extends ListenerAdapter {
+public class GetCommand extends ListenerAdapter implements CommandEvent {
 
     private final DiscordService discordService;
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        if (event.getName().equalsIgnoreCase("get")) {
-            event.deferReply().queue();
-
-            discordService.get(event);
-        }
+        handle(event, () -> discordService.get(event));
     }
 
-    public SlashCommandData getSlashCommand() {
-        return Commands.slash("get", "get a movies")
-                .addOption(OptionType.INTEGER, "index", "type an index from you search list.", true);
+    @Override
+    public String getValueAsString() {
+        return "get";
+    }
+
+    @Override
+    public SlashCommandData getValue() {
+        return Commands.slash(getValueAsString(), "get a movies")
+                .addOption(
+                        OptionType.INTEGER, "index", "type an index from you search list.", true
+                );
     }
 }

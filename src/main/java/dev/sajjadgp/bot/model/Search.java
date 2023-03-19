@@ -38,10 +38,6 @@ public class Search {
     @JsonAlias({"release_date", "first_air_date"})
     private LocalDate released;
 
-    public static String generateTitle(Search s) {
-        return s.getTitle() + " (" + s.getReleased().getYear() + ")";
-    }
-
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
